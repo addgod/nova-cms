@@ -2,6 +2,7 @@
 
 namespace Addgod\NovaCms;
 
+use Addgod\NovaCms\Commands\NovaCmsPagePublish;
 use Addgod\NovaCms\Http\Middleware\Authorize;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -20,6 +21,12 @@ class ToolServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-cms');
 
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                NovaCmsPagePublish::class,
+            ]);
+        }
 
         $this->app->booted(function () {
             $this->routes();

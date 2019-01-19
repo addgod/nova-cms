@@ -15,12 +15,10 @@ class PageController
      */
     public function show($slug = "home")
     {
-        try {
-            $page = Page::whereSlug($slug)->first();
-        } catch (\Exception $e) {
-            return Redirect::to('/');
+        if ($page = Page::whereStatus(Page::LIVE)->whereSlug($slug)->first()) {
+            return view('page', ['page' => $page]);
         }
 
-        return view('page', ['page' => $page]);
+        return abort(404);
     }
 }

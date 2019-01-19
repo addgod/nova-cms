@@ -9,6 +9,10 @@ class Page extends Model
 {
     use SoftDeletes;
 
+    const DRAFT     = 0;
+    const PUBLISHED = 1;
+    const LIVE      = 2;
+
     protected $fillable = [
         'title',
         'slug',
