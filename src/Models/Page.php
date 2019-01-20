@@ -13,21 +13,38 @@ class Page extends Model
     const PUBLISHED = 1;
     const LIVE      = 2;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'title',
         'slug',
+        'metadata',
         'content',
         'status',
         'order',
         'scheduled_at',
     ];
 
+    /**
+     * The attributes that should be mutated into dates.
+     *
+     * @var array
+     */
     protected $dates = [
         'scheduled_at',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
-        'content' => 'object',
+        'metadata' => 'object',
+        'content'  => 'object',
     ];
 
 }

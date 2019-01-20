@@ -1,13 +1,15 @@
 {
     "name": "addgod/nova-cms",
-    "description": "A Laravel Nova tool.",
+    "description": "A full CMS for nova, using nova resources.",
     "keywords": [
         "laravel",
         "nova"
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.1.0"
+        "php": ">=7.1.0",
+        "addgod/component-field": "^1.0",
+        "infinety-es/nova-filemanager": "^1.1"
     },
     "autoload": {
         "psr-4": {

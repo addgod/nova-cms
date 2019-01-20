@@ -17,6 +17,7 @@ class CreatePagesTable extends Migration
             $table->increments('id');
             $table->text('title');
             $table->string('slug')->unique()->index();
+            $table->json('metadata')->nullable();
             $table->json('content')->nullable();
 
             $table->tinyInteger('status')->index();
