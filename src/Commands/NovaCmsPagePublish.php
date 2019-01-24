@@ -40,6 +40,6 @@ class NovaCmsPagePublish extends Command
     public function handle()
     {
         $pages = Page::where('status', Page::PUBLISHED)->whereDate('scheduled_at', '>=', Carbon::now());
-        $pages->update('status', PAGE::LIVE);
+        $pages->update(['status' => PAGE::LIVE]);
     }
 }

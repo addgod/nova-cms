@@ -16,7 +16,7 @@ class PageController
     public function show($slug = "home")
     {
         if ($page = Page::whereStatus(Page::LIVE)->whereSlug($slug)->first()) {
-            return view('page', ['page' => $page]);
+            return view('nova-cms::page', ['page' => $page]);
         }
 
         return abort(404);
