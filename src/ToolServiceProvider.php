@@ -21,6 +21,11 @@ class ToolServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-cms');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
+        $this->publishes([
+            __DIR__ . '/../publishes/Page.php' => app_path('Nova/Page.php'),
+            __DIR__ . '/../resources/views'    => resource_path('views/vendor/nova-cms'),
+        ]);
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 NovaCmsPagePublish::class,
