@@ -7,9 +7,9 @@
 @section('og_image', @$page->content->og_image)
 
 @section('content')
-    @if (isset($page->content->blocks))
-        @foreach ($page->content->blocks as $block)
-            @include('nova-cms::components.' . $block->component, ['block' => $block])
+    @if (isset($page->content['blocks']))
+        @foreach ($page->content['blocks'] as $block)
+            @include('nova-cms::components.' . $block['component'], ['block' => $block])
         @endforeach
     @endif
 @endsection

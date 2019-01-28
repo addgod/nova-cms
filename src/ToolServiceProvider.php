@@ -4,8 +4,11 @@ namespace Addgod\NovaCms;
 
 use Addgod\NovaCms\Commands\NovaCmsPagePublish;
 use Addgod\NovaCms\Http\Middleware\Authorize;
+use Addgod\NovaCms\Http\Middleware\Locale;
+use App\Nova\Page;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Infinety\Filemanager\FilemanagerTool;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 
@@ -37,7 +40,9 @@ class ToolServiceProvider extends ServiceProvider
         });
 
         Nova::serving(function (ServingNova $event) {
-            //
+            Nova::tools([
+                new FilemanagerTool(),
+            ]);
         });
     }
 
@@ -56,7 +61,15 @@ class ToolServiceProvider extends ServiceProvider
             ->prefix('nova-vendor/nova-cms')
             ->group(__DIR__ . '/../routes/api.php');
 
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        Route::middleware(['web', Locale::class])
+            ->prefix('{locale}')
+            ->where(['locale' => implode('|', Page::$locales)])
+            ->group(__DIR__ . '/../routes/web.php');
+
+        Route::get('/', function () {
+            return redirect()->setStatusCode(301)->route('page.show', ['locale' => Page::$defaultLocale]);
+        });
+
     }
 
     /**
