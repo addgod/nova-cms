@@ -15,7 +15,7 @@ class Page extends NovaPage
      *
      * @var array
      */
-    public static $locales = ['en', 'da'];
+    public static $locales = ['en'];
 
     /**
      * The default locale, that the system uses.
