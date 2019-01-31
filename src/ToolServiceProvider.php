@@ -68,7 +68,7 @@ class ToolServiceProvider extends ServiceProvider
                 ->group(__DIR__ . '/../routes/web.php');
 
             Route::get('/', function () {
-                return redirect()->setStatusCode(301)->route('page.show', ['locale' => Page::$defaultLocale]);
+                return redirect()->route('page.show', ['locale' => Page::$defaultLocale], 301);
             });
         }
     }
