@@ -24,4 +24,4 @@ To use this package, navigate to app\Nova\Page.php. Here there is some example c
 The components, and the represented blade files in the resources\views\nova-cms\components folder. 
 
 ## Known issues.
-Validation on nova fields, does not work.
+When removing a nested component, it will always remove the last component, no matter witch one is clicked on.

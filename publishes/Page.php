@@ -25,7 +25,7 @@ class Page extends NovaPage
     public static $defaultLocale = 'en';
 
     /**
-     * Get all the components that are displayed by the resource.
+     * Get all the metadata that can be used by this resource.
      *
      * @return array
      */
@@ -37,7 +37,7 @@ class Page extends NovaPage
     }
 
     /**
-     * Get all the metadata that can be used by this resource.
+     * Get all the components that are displayed by the resource.
      *
      * @return array
      */
