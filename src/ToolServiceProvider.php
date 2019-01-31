@@ -61,15 +61,16 @@ class ToolServiceProvider extends ServiceProvider
             ->prefix('nova-vendor/nova-cms')
             ->group(__DIR__ . '/../routes/api.php');
 
-        Route::middleware(['web', Locale::class])
-            ->prefix('{locale}')
-            ->where(['locale' => implode('|', Page::$locales)])
-            ->group(__DIR__ . '/../routes/web.php');
+        if (class_exists(Page::class)) {
+            Route::middleware(['web', Locale::class])
+                ->prefix('{locale}')
+                ->where(['locale' => implode('|', Page::$locales)])
+                ->group(__DIR__ . '/../routes/web.php');
 
-        Route::get('/', function () {
-            return redirect()->setStatusCode(301)->route('page.show', ['locale' => Page::$defaultLocale]);
-        });
-
+            Route::get('/', function () {
+                return redirect()->setStatusCode(301)->route('page.show', ['locale' => Page::$defaultLocale]);
+            });
+        }
     }
 
     /**
