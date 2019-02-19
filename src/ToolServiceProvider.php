@@ -5,8 +5,10 @@ namespace Addgod\NovaCms;
 use Addgod\NovaCms\Commands\NovaCmsPagePublish;
 use Addgod\NovaCms\Http\Middleware\Authorize;
 use Addgod\NovaCms\Http\Middleware\Locale;
+use Addgod\NovaCms\Models\Page as ModelPage;
 use App\Nova\Page;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Infinety\Filemanager\FilemanagerTool;
 use Laravel\Nova\Events\ServingNova;
@@ -37,6 +39,11 @@ class ToolServiceProvider extends ServiceProvider
 
         $this->app->booted(function () {
             $this->routes();
+        });
+
+        View::composer('nova-cms::partials.navigation', function ($view) {
+            $pages = ModelPage::whereStatus(ModelPage::LIVE)->get();
+            $view->with('menus', $pages);
         });
 
         Nova::serving(function (ServingNova $event) {

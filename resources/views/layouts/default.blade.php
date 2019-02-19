@@ -13,6 +13,8 @@
 </head>
 <body>
 
+@include('nova-cms::partials.navigation')
+
 @yield('content')
 
 <!-- Optional JavaScript -->
