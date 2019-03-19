@@ -19,6 +19,6 @@ class PageController
             return view('nova-cms::page', ['page' => $page]);
         }
 
-        return abort(404);
+        return redirect()->to('/');
     }
 }
