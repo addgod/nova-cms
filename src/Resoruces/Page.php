@@ -5,6 +5,7 @@ namespace Addgod\NovaCms\Resources;
 use Addgod\ComponentField\ComponentField;
 use Addgod\NovaTranslateField\Translate;
 use App\Nova\Resource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
@@ -35,13 +36,6 @@ abstract class Page extends Resource
     public static $model = "Addgod\NovaCms\Models\Page";
 
     /**
-     * Hide resource from Nova's standard menu.
-     *
-     * @var bool
-     */
-    public static $displayInNavigation = false;
-
-    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -57,7 +51,12 @@ abstract class Page extends Resource
         'id', 'title', 'slug',
     ];
 
-    public function __construct(\Illuminate\Database\Eloquent\Model $resource)
+    /**
+     * Page constructor.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $resource
+     */
+    public function __construct(Model $resource)
     {
         parent::__construct($resource);
 
@@ -67,7 +66,7 @@ abstract class Page extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return array
      * @throws \Exception

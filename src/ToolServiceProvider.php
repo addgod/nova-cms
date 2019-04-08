@@ -10,9 +10,6 @@ use App\Nova\Page;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Infinety\Filemanager\FilemanagerTool;
-use Laravel\Nova\Events\ServingNova;
-use Laravel\Nova\Nova;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -44,12 +41,6 @@ class ToolServiceProvider extends ServiceProvider
         View::composer('nova-cms::partials.navigation', function ($view) {
             $pages = ModelPage::whereStatus(ModelPage::LIVE)->get();
             $view->with('menus', $pages);
-        });
-
-        Nova::serving(function (ServingNova $event) {
-            Nova::tools([
-                new FilemanagerTool(),
-            ]);
         });
     }
 
