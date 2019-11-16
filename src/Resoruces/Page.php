@@ -5,7 +5,6 @@ namespace Addgod\NovaCms\Resources;
 use Addgod\ComponentField\ComponentField;
 use Addgod\NovaTranslateField\Translate;
 use App\Nova\Resource;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
@@ -14,6 +13,13 @@ use Laravel\Nova\Fields\Text;
 
 abstract class Page extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'CMS';
+
     /**
      * The locales that are used.
      *
@@ -36,11 +42,18 @@ abstract class Page extends Resource
     public static $model = "Addgod\NovaCms\Models\Page";
 
     /**
+     * Hide resource from Nova's standard menu.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = true;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'Page';
 
     /**
      * The columns that should be searched.
@@ -48,8 +61,24 @@ abstract class Page extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'slug',
+        'id',
+        'title',
+        'slug',
     ];
+
+    /**
+     * Metadata
+     *
+     * @var \Addgod\ComponentField\ComponentField
+     */
+    protected $metadata;
+
+    /**
+     * Content
+     *
+     * @var \Addgod\ComponentField\ComponentField
+     */
+    protected $content;
 
     /**
      * Page constructor.
@@ -61,6 +90,11 @@ abstract class Page extends Resource
         parent::__construct($resource);
 
         Translate::locales(static::$locales, static::$defaultLocale);
+
+        $this->metadata = ComponentField::make('Metadata');
+        $this->content = ComponentField::make('Content');
+        $this->metadata($this->metadata);
+        $this->content($this->content);
     }
 
     /**
@@ -75,7 +109,7 @@ abstract class Page extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Slug')->rules('required')->sortable(),
+            Text::make('Slug')->rules('required', 'unique:pages,slug,{{resourceId}}')->sortable(),
             Select::make('Status')
                 ->options([0 => 'Draft', 1 => 'Published', 2 => 'Live'])
                 ->displayUsingLabels()
@@ -83,12 +117,15 @@ abstract class Page extends Resource
             DateTime::make('Publishing on', 'scheduled_at'),
             Translate::make([
                 Text::make('Title')->rules('required'),
-                ComponentField::make('Metadata')->fields($this->metadata()),
-                ComponentField::make('Content')->fields($this->components()),
+                $this->metadata->stacked(),
+                $this->content->stacked(),
             ]),
             Text::make('Preview')
                 ->withMeta([
-                    'value' => '<a href="/' . route('page.show', ['locale' => static::$defaultLocale, 'slug' => $this->slug]) . '" target="_blank">Preview</a>',
+                    'value' => '<a href="' . route('page.show', [
+                            'locale' => static::$defaultLocale,
+                            'slug'   => $this->slug,
+                        ]) . '" target="_blank">Preview</a>',
                 ])
                 ->asHtml()
                 ->onlyOnIndex(),
@@ -98,14 +135,18 @@ abstract class Page extends Resource
     /**
      * Get all the components that are displayed by the resource.
      *
-     * @return array
+     * @param \Addgod\ComponentField\ComponentField $metadata
+     *
+     * @return void
      */
-    abstract public function components(): array;
+    abstract public function content(ComponentField $metadata): void;
 
     /**
      * Get all the metadata that can be used by this resource.
      *
-     * @return array
+     * @param \Addgod\ComponentField\ComponentField $content
+     *
+     * @return void
      */
-    abstract public function metadata(): array;
+    abstract public function metadata(ComponentField $content): void;
 }

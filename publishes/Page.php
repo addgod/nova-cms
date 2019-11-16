@@ -27,26 +27,28 @@ class Page extends NovaPage
     /**
      * Get all the metadata that can be used by this resource.
      *
-     * @return array
+     * @param \Addgod\ComponentField\ComponentField $metadata
+     *
+     * @return void
      */
-    public function metadata(): array
+    public function metadata(ComponentField $metadata): void
     {
-        return [
+        $metadata->addSection('Meta fields', 'meta_fields', [
             Text::make('Navigation title'),
-        ];
+        ], 1);
     }
 
     /**
      * Get all the components that are displayed by the resource.
      *
-     * @return array
+     * @param \Addgod\ComponentField\ComponentField $content
+     *
+     * @return void
      */
-    public function components(): array
+    public function content(ComponentField $content): void
     {
-        return [
-            ComponentField::make('Hero', 'blocks')->fields([
-                Markdown::make('Content')->rules('required'),
-            ]),
-        ];
+        $content->addSection('Hero', 'hero', [
+            Markdown::make('Content')->rules('required'),
+        ], 1);
     }
 }

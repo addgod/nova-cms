@@ -60,14 +60,17 @@ class ToolServiceProvider extends ServiceProvider
             ->group(__DIR__ . '/../routes/api.php');
 
         if (class_exists(Page::class)) {
-            Route::middleware(['web', Locale::class])
-                ->prefix('{locale}')
-                ->where(['locale' => implode('|', Page::$locales)])
-                ->group(__DIR__ . '/../routes/web.php');
+            $route = Route::middleware(['web', Locale::class]);
+            if (count(Page::$locales) > 1) {
+                $route
+                    ->prefix('{locale}')
+                    ->where(['locale' => implode('|', Page::$locales)]);
 
-            Route::get('/', function () {
-                return redirect()->route('page.show', ['locale' => Page::$defaultLocale], 301);
-            });
+                Route::get('/', function () {
+                    return redirect()->route('page.show', ['locale' => Page::$defaultLocale], 301);
+                });
+            }
+            $route->group(__DIR__ . '/../routes/web.php');
         }
     }
 
