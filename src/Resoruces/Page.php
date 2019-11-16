@@ -5,6 +5,7 @@ namespace Addgod\NovaCms\Resources;
 use Addgod\ComponentField\ComponentField;
 use Addgod\NovaTranslateField\Translate;
 use App\Nova\Resource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
