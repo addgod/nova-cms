@@ -3,7 +3,6 @@
 namespace Addgod\NovaCms;
 
 use Addgod\NovaCms\Commands\NovaCmsPagePublish;
-use Addgod\NovaCms\Http\Middleware\Authorize;
 use Addgod\NovaCms\Http\Middleware\Locale;
 use Addgod\NovaCms\Models\Page as ModelPage;
 use App\Nova\Page;
@@ -55,12 +54,8 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Route::middleware(['nova', Authorize::class])
-            ->prefix('nova-vendor/nova-cms')
-            ->group(__DIR__ . '/../routes/api.php');
-
         if (class_exists(Page::class)) {
-            $route = Route::middleware(['web', Locale::class]);
+            $route = Route::middleware(['web', Locale::class])->namespace('Addgod\NovaCms\Http\Controllers');
             if (count(Page::$locales) > 1) {
                 $route
                     ->prefix('{locale}')

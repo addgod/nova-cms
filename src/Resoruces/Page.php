@@ -26,7 +26,7 @@ abstract class Page extends Resource
      *
      * @var array
      */
-    public static $locales = ['en', 'da'];
+    public static $locales = ['en'];
 
     /**
      * The default locale, that the system uses.
@@ -124,8 +124,7 @@ abstract class Page extends Resource
             Text::make('Preview')
                 ->withMeta([
                     'value' => '<a href="' . route('page.show', [
-                            'locale' => static::$defaultLocale,
-                            'slug'   => $this->slug,
+                            'slug' => $this->slug,
                         ]) . '" target="_blank">Preview</a>',
                 ])
                 ->asHtml()
