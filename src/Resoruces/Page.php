@@ -14,6 +14,13 @@ use Laravel\Nova\Fields\Text;
 abstract class Page extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'CMS';
+
+    /**
      * The locales that are used.
      *
      * @var array
@@ -39,14 +46,14 @@ abstract class Page extends Resource
      *
      * @var bool
      */
-    public static $displayInNavigation = false;
+    public static $displayInNavigation = true;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'Page';
 
     /**
      * The columns that should be searched.
@@ -54,20 +61,41 @@ abstract class Page extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'slug',
+        'id',
+        'title',
+        'slug',
     ];
+
+    /**
+     * Metadata
+     *
+     * @var \Addgod\ComponentField\ComponentField
+     */
+    protected $metadata;
+
+    /**
+     * Content
+     *
+     * @var \Addgod\ComponentField\ComponentField
+     */
+    protected $content;
 
     public function __construct(\Illuminate\Database\Eloquent\Model $resource)
     {
         parent::__construct($resource);
 
         Translate::locales(static::$locales, static::$defaultLocale);
+
+        $this->metadata = ComponentField::make('Metadata');
+        $this->content = ComponentField::make('Content');
+        $this->metadata($this->metadata);
+        $this->content($this->content);
     }
 
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return array
      * @throws \Exception
@@ -76,7 +104,7 @@ abstract class Page extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Slug')->rules('required')->sortable(),
+            Text::make('Slug')->rules('required', 'unique:pages,slug,{{resourceId}}')->sortable(),
             Select::make('Status')
                 ->options([0 => 'Draft', 1 => 'Published', 2 => 'Live'])
                 ->displayUsingLabels()
@@ -84,12 +112,15 @@ abstract class Page extends Resource
             DateTime::make('Publishing on', 'scheduled_at'),
             Translate::make([
                 Text::make('Title')->rules('required'),
-                ComponentField::make('Metadata')->fields($this->metadata()),
-                ComponentField::make('Content')->fields($this->components()),
+                $this->metadata->stacked(),
+                $this->content->stacked(),
             ]),
             Text::make('Preview')
                 ->withMeta([
-                    'value' => '<a href="/' . route('page.show', ['locale' => static::$defaultLocale, 'slug' => $this->slug]) . '" target="_blank">Preview</a>',
+                    'value' => '<a href="' . route('page.show', [
+                            'locale' => static::$defaultLocale,
+                            'slug'   => $this->slug,
+                        ]) . '" target="_blank">Preview</a>',
                 ])
                 ->asHtml()
                 ->onlyOnIndex(),
@@ -99,14 +130,18 @@ abstract class Page extends Resource
     /**
      * Get all the components that are displayed by the resource.
      *
-     * @return array
+     * @param \Addgod\ComponentField\ComponentField $metadata
+     *
+     * @return void
      */
-    abstract public function components(): array;
+    abstract public function content(ComponentField $metadata): void;
 
     /**
      * Get all the metadata that can be used by this resource.
      *
-     * @return array
+     * @param \Addgod\ComponentField\ComponentField $content
+     *
+     * @return void
      */
-    abstract public function metadata(): array;
+    abstract public function metadata(ComponentField $content): void;
 }

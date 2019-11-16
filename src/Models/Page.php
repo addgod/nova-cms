@@ -44,5 +44,4 @@ class Page extends Model
     protected $dates = [
         'scheduled_at',
     ];
-
 }
