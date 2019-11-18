@@ -3,16 +3,12 @@
 namespace Addgod\NovaCms;
 
 use Addgod\NovaCms\Commands\NovaCmsPagePublish;
-use Addgod\NovaCms\Http\Middleware\Authorize;
 use Addgod\NovaCms\Http\Middleware\Locale;
 use Addgod\NovaCms\Models\Page as ModelPage;
 use App\Nova\Page;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Infinety\Filemanager\FilemanagerTool;
-use Laravel\Nova\Events\ServingNova;
-use Laravel\Nova\Nova;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -45,12 +41,6 @@ class ToolServiceProvider extends ServiceProvider
             $pages = ModelPage::whereStatus(ModelPage::LIVE)->get();
             $view->with('menus', $pages);
         });
-
-        Nova::serving(function (ServingNova $event) {
-            Nova::tools([
-                new FilemanagerTool(),
-            ]);
-        });
     }
 
     /**
@@ -64,12 +54,8 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Route::middleware(['nova', Authorize::class])
-            ->prefix('nova-vendor/nova-cms')
-            ->group(__DIR__ . '/../routes/api.php');
-
         if (class_exists(Page::class)) {
-            $route = Route::middleware(['web', Locale::class]);
+            $route = Route::middleware(['web', Locale::class])->namespace('Addgod\NovaCms\Http\Controllers');
             if (count(Page::$locales) > 1) {
                 $route
                     ->prefix('{locale}')

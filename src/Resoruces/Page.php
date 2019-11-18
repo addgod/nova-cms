@@ -5,6 +5,7 @@ namespace Addgod\NovaCms\Resources;
 use Addgod\ComponentField\ComponentField;
 use Addgod\NovaTranslateField\Translate;
 use App\Nova\Resource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
@@ -25,7 +26,7 @@ abstract class Page extends Resource
      *
      * @var array
      */
-    public static $locales = ['en', 'da'];
+    public static $locales = ['en'];
 
     /**
      * The default locale, that the system uses.
@@ -80,7 +81,12 @@ abstract class Page extends Resource
      */
     protected $content;
 
-    public function __construct(\Illuminate\Database\Eloquent\Model $resource)
+    /**
+     * Page constructor.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $resource
+     */
+    public function __construct(Model $resource)
     {
         parent::__construct($resource);
 
@@ -118,8 +124,8 @@ abstract class Page extends Resource
             Text::make('Preview')
                 ->withMeta([
                     'value' => '<a href="' . route('page.show', [
-                            'locale' => static::$defaultLocale,
-                            'slug'   => $this->slug,
+                            'locale' => self::$defaultLocale,
+                            'slug' => $this->slug,
                         ]) . '" target="_blank">Preview</a>',
                 ])
                 ->asHtml()
