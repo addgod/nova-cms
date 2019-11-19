@@ -124,8 +124,8 @@ abstract class Page extends Resource
             Text::make('Preview')
                 ->withMeta([
                     'value' => '<a href="' . route('page.show', [
-                            'locale' => self::$defaultLocale,
-                            'slug' => $this->slug,
+                            'locale' => $this::$defaultLocale,
+                            'slug'   => $this->slug,
                         ]) . '" target="_blank">Preview</a>',
                 ])
                 ->asHtml()
