@@ -22,20 +22,6 @@ abstract class Page extends Resource
     public static $group = 'CMS';
 
     /**
-     * The locales that are used.
-     *
-     * @var array
-     */
-    public static $locales = ['en'];
-
-    /**
-     * The default locale, that the system uses.
-     *
-     * @var string
-     */
-    public static $defaultLocale = 'en';
-
-    /**
      * The model the resource corresponds to.
      *
      * @var string
@@ -89,8 +75,6 @@ abstract class Page extends Resource
     public function __construct(Model $resource)
     {
         parent::__construct($resource);
-
-        Translate::locales(static::$locales, static::$defaultLocale);
 
         $this->metadata = ComponentField::make('Metadata');
         $this->content = ComponentField::make('Content');
