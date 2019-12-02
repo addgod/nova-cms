@@ -5,6 +5,7 @@ namespace Addgod\NovaCms\Resources;
 use Addgod\ComponentField\ComponentField;
 use Addgod\NovaTranslateField\Translate;
 use App\Nova\Resource;
+use Eminiarts\Tabs\TabsOnEdit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
@@ -14,6 +15,8 @@ use Laravel\Nova\Fields\Text;
 
 abstract class Page extends Resource
 {
+    use TabsOnEdit;
+
     /**
      * The logical group associated with the resource.
      *
@@ -108,7 +111,7 @@ abstract class Page extends Resource
             Text::make('Preview')
                 ->withMeta([
                     'value' => '<a href="' . route('page.show', [
-                            'locale' => $this::$defaultLocale,
+                            'locale' => config('app.locale'),
                             'slug'   => $this->slug,
                         ]) . '" target="_blank">Preview</a>',
                 ])
