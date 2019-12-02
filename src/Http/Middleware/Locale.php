@@ -2,7 +2,7 @@
 
 namespace Addgod\NovaCms\Http\Middleware;
 
-use App\Nova\Page;
+use App\Nova\Resource;
 use Closure;
 
 class Locale
@@ -18,9 +18,9 @@ class Locale
     public function handle($request, Closure $next)
     {
         if ($request->method() === 'GET') {
-            $locale = Page::$defaultLocale;
+            $locale = config('app.locale');
             $segment = $request->segment(1);
-            if (in_array($segment, Page::$locales)) {
+            if (in_array($segment, Resource::$locales)) {
                 $locale = $segment;
                 url()->defaults(['locale' => $locale]);
             }
