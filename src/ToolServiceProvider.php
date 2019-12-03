@@ -6,6 +6,7 @@ use Addgod\NovaCms\Commands\NovaCmsPagePublish;
 use Addgod\NovaCms\Http\Middleware\Locale;
 use Addgod\NovaCms\Models\Page as ModelPage;
 use App\Nova\Page;
+use App\Nova\Resource;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -54,15 +55,15 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        if (class_exists(Page::class)) {
+        if (class_exists(Page::class) && isset(Resource::$locales)) {
             $route = Route::middleware(['web', Locale::class])->namespace('Addgod\NovaCms\Http\Controllers');
-            if (count(Page::$locales) > 1) {
+            if (count(Resource::$locales) > 1) {
                 $route
                     ->prefix('{locale}')
-                    ->where(['locale' => implode('|', Page::$locales)]);
+                    ->where(['locale' => implode('|', Resource::$locales)]);
 
                 Route::get('/', function () {
-                    return redirect()->route('page.show', ['locale' => Page::$defaultLocale], 301);
+                    return redirect()->route('page.show', ['locale' => config('app.locale')], 301);
                 });
             }
             $route->group(__DIR__ . '/../routes/web.php');
