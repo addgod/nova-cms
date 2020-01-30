@@ -15,7 +15,18 @@ class PageController
      */
     public function show(string $slug = "/")
     {
-        if ($page = Page::whereStatus(Page::LIVE)->whereSlug($slug)->first()) {
+        $statuses = [
+            Page::LIVE,
+        ];
+
+        if (auth()->check()) {
+            $statuses = array_merge($statuses, [
+                Page::DRAFT,
+                Page::PUBLISHED,
+            ]);
+        }
+
+        if ($page = Page::whereIn('status', $statuses)->whereSlug($slug)->first()) {
             return view('nova-cms::page', ['page' => $page]);
         }
 
