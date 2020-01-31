@@ -39,7 +39,18 @@ class ToolServiceProvider extends ServiceProvider
         });
 
         View::composer('nova-cms::partials.navigation', function ($view) {
-            $pages = ModelPage::whereStatus(ModelPage::LIVE)->get();
+            $statuses = [
+                ModelPage::LIVE,
+            ];
+
+            if (auth()->check()) {
+                $statuses = array_merge($statuses, [
+                    ModelPage::DRAFT,
+                    ModelPage::PUBLISHED,
+                ]);
+            }
+
+            $pages = ModelPage::whereIn('status', $statuses)->get();
             $view->with('menus', $pages);
         });
     }
