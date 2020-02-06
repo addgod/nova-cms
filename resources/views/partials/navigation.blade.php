@@ -12,7 +12,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            @foreach($menus as $menu)
+            @foreach(\Addgod\NovaCms\Models\Page::all() as $menu)
                 <li class="nav-item {{ Str::startsWith($page->slug, $menu->slug) ? 'active' : '' }}">
                     <a
                         class="nav-link"

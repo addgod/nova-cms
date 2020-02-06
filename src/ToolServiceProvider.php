@@ -4,11 +4,9 @@ namespace Addgod\NovaCms;
 
 use Addgod\NovaCms\Commands\NovaCmsPagePublish;
 use Addgod\NovaCms\Http\Middleware\Locale;
-use Addgod\NovaCms\Models\Page as ModelPage;
 use App\Nova\Page;
 use App\Nova\Resource;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class ToolServiceProvider extends ServiceProvider
@@ -36,22 +34,6 @@ class ToolServiceProvider extends ServiceProvider
 
         $this->app->booted(function () {
             $this->routes();
-        });
-
-        View::composer('nova-cms::partials.navigation', function ($view) {
-            $statuses = [
-                ModelPage::LIVE,
-            ];
-
-            if (auth()->check()) {
-                $statuses = array_merge($statuses, [
-                    ModelPage::DRAFT,
-                    ModelPage::PUBLISHED,
-                ]);
-            }
-
-            $pages = ModelPage::whereIn('status', $statuses)->get();
-            $view->with('menus', $pages);
         });
     }
 
