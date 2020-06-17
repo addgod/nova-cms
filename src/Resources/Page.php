@@ -4,7 +4,7 @@ namespace Addgod\NovaCms\Resources;
 
 use Addgod\ComponentField\ComponentField;
 use Addgod\NovaTranslateField\Translate;
-use Laravel\Nova\Resource;
+use App\Nova\Resource;
 use Eminiarts\Tabs\TabsOnEdit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
